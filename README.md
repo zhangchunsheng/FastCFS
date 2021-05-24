@@ -1,119 +1,80 @@
-# FastCFS
+# FastCFS -- a high performance distributed file system for databases, K8s and VM etc.
+
+Chinese language please click: [README in Chinese](README-zh_CN.md)
 
 ## 1. About
 
-FastCFS is a high performance distributed file storage system.
+FastCFS is a block based standard distributed file system which can be used as the back-end storage of databases (MySQL, PostgresSQL, Oracle etc.), K8s and virtual machines such as KVM.
 
-## 2. Development Status
+## 2. Current Version
 
-Developing
+V2.0.1
 
-## 3. Supported Platform
+## 3. Supported Platforms
 
-* CentOS (version 7.8 or newer)
-* Ubuntu (Testing)
-* BSD (Testing)
+* Linux: Kernel version >= 3.10  (Full support)
+* MacOS or FreeBSD (Only server side)
 
 ## 4. Dependencies
 
 * [libfuse](https://github.com/libfuse/libfuse) (version 3.9.4 or newer)
     * [Python](https://python.org/) (version 3.5 or newer)
     * [Ninja](https://ninja-build.org/) (version 1.7 or newer)
-    * [gcc](https://www.gnu.org/software/gcc/) (version 7.5.0 or newer)
-* [libfastcommon](https://github.com/happyfish100/libfastcommon) (version commit-c2d8faa)
-* [libserverframe](https://github.com/happyfish100/libserverframe) (version commit-02adaac)
-* [fastDIR](https://github.com/happyfish100/fastDIR) (version commit-62cab21)
+    * [gcc](https://www.gnu.org/software/gcc/) (version 4.7.0 or newer)
+* [libfastcommon](https://github.com/happyfish100/libfastcommon) (tag: V1.0.50)
+* [libserverframe](https://github.com/happyfish100/libserverframe) (tag: V1.1.7)
+* [fastDIR](https://github.com/happyfish100/fastDIR) (tag: V2.0.1)
+* [faststore](https://github.com/happyfish100/faststore) (tag: V2.0.1)
+* [FastCFS](https://github.com/happyfish100/FastCFS) (tag: V2.0.1)
 
 ## 5. Installation
 
-### 5.1. libfastcommon
+### 5.1 DIY installation (step by step)
 
-版本号：version 1.43
+please see [INSTALL](docs/INSTALL.md)
 
-```
-git clone https://github.com/happyfish100/libfastcommon.git
-cd libfastcommon/
-git checkout master
-./make.sh clean && ./make.sh && ./make.sh install
-```
+recommend to execute libfuse_setup.sh for compiling and installing libfuse
 
-默认安装目录：
-```
-/usr/lib64
-/usr/lib
-/usr/include/fastcommon
-```
+### 5.2 easy installation
 
-### 5.2. libserverframe
+libfastcommon, libserverframe, fastDIR, faststore and FastCFS can be compiled, installed and auto configurated by fastcfs.sh
+
+fastcfs.sh can automatically pull or update above five projects codes from GitHub, compile and install according to dependency orders, and automatically generate cluster related configuration files according to the config templates.
 
 ```
-git clone https://github.com/happyfish100/libserverframe.git
-./make.sh
-./make.sh install
+git clone https://github.com/happyfish100/FastCFS.git; cd FastCFS/
 ```
 
-### 5.3. fastDIR
+fastcfs.sh usage:
 
 ```
-git clone https://github.com/happyfish100/fastDIR.git
-./make.sh
-./make.sh install
+* setup: pull/update codes from gitee, then make and install
+* config: copy config files and configure them with local ip
+* start | stop | restart: for service processes control
 ```
 
-编译警告信息：
+one click to build (deploy and run) single node demo environment (MUST run by root):
 
 ```
-perl: warning: Setting locale failed.
-perl: warning: Please check that your locale settings:
-	LANGUAGE = (unset),
-	LC_ALL = (unset),
-	LC_CTYPE = "UTF-8",
-	LANG = "en_US.UTF-8"
-    are supported and installed on your system.
-perl: warning: Falling back to the standard locale ("C").
+./helloWorld.sh
 ```
 
-可以修改/etc/profile，增加export LC_ALL=C解决上这个警告（记得刷新当前session：. /etc/profile）
-头文件安装成功，其他目录创建失败。
+or execute following commands (MUST run by root):
 
 ```
-git clone https://github.com/happyfish100/faststore.git
-cd faststore/
-./make.sh
-./make.sh install
-cp conf/server.conf /etc/fdir/
-cp conf/client.conf /etc/fdir/
-mkdir /usr/local/faststore
+./fastcfs.sh setup
+./fastcfs.sh config --force
+./fastcfs.sh restart
 ```
 
-## 6. Configuration
+now you can see the mounted path of FastCFS by the command:
 
-In order to control FastCFS's performance, we provide highly configurable and tunable behavior for FastCFS via various settings.
+```
+df -h /opt/fastcfs/fuse | grep fuse
+```
 
-FastCFS's configuration comprise multiple subfiles, one entry file and others use to reference. The directory /etc/fstore is the default location for FastCFS's config files, but when install multiple FastCFS instances on a single server, you must specify distinct location for each one.
+## 6. Contact us
 
-FastCFS has the following config files:
+email: 384681(at)qq(dot)com
 
-* cluster.conf - 
-* server.conf
-* servers.conf
-* storage.conf
-* client.conf - Use with client，need to reference cluster.conf
-
-### 6.1. Configure server.conf 
-
-### 6.2. cluster.conf configure
-
-### 6.3. servers.conf configure
-
-### 6.4. storage.conf configure
-
-### 6.5. client.conf configure
-
-## Running
-
-Coming soon.
-
-## License
-
-FastCFS is Open Source software released under the GNU General Public License V3.
+WeChat subscription: search "fastdfs" for the related articles (Chinese Only)
